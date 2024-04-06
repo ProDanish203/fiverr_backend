@@ -1,6 +1,6 @@
 import { config } from "dotenv";
-import { connDb } from "./config/db";
-import { app } from "./app";
+import { connDb } from "./config/db.js";
+import { app } from "./app.js";
 
 // .env config
 config();

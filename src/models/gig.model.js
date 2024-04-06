@@ -45,14 +45,18 @@ const GigSchema = new Schema(
                 },
             },
         ],
+        noOfRevisions: {
+            type: Number,
+            default: 1,
+        },
         deliveryTime: {
-            type: Number, 
+            type: Number,
             required: [true, "Gig delivery time is required"],
         },
         sales: {
-            type: Number, 
-            default: 0
-        },  
+            type: Number,
+            default: 0,
+        },
     },
     { timestamps: true }
 );
