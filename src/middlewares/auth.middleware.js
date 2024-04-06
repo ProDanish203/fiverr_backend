@@ -11,13 +11,12 @@ export const verifyAuth = (roles) => {
             if (!token) return next("Unauthorized Access");
 
             const payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-
             const user = await User.findById(payload?._id).select(
                 "-password -refreshToken"
             );
 
             if (!user) return next("Unauthorized Access");
-            if(!roles.includes(req.user.role)) return next("Unauthorized Access");
+            if (!roles.includes(user.role)) return next("Unauthorized Access");
 
             req.user = user;
             next();

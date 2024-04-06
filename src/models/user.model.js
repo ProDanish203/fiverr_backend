@@ -52,6 +52,10 @@ const UserSchema = new Schema(
         phone: String,
         desc: String,
         refreshToken: String,
+        forgotPasswordToken: String,
+        forgotPasswordTokenExpiry: String,
+        verifyToken: String,
+        verifyTokenExpiry: String,
     },
     { timestamps: true }
 );
