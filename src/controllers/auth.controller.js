@@ -1,5 +1,6 @@
 import { User } from "../models/user.model.js";
 import jwt from "jsonwebtoken";
+import { sendVerificationMail } from "../utils/mailer.js";
 
 export const registerUser = async (req, res, next) => {
     try {
@@ -164,4 +165,56 @@ export const refreshAccessToken = async (req, res, next) => {
     }
 };
 
+export const sendForgotLink = async (req, res, next) => {
+    try {
+        const { email } = req.body;
+        if (!email) return next("Email is required");
 
+        const user = await User.findOne({ email });
+        if (!user) return next("No account exists for this email");
+
+        await sendVerificationMail({
+            email,
+            type: "RESET",
+            userId: user._id,
+        });
+
+        return res.status(201).json({
+            success: true,
+            message: "Email has been sent",
+            data: {},
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const resetPassword = async (req, res, next) => {
+    try {
+        const { token, newPassword } = req.body;
+
+        const user = await User.findOne({
+            forgotPasswordToken: token,
+            forgotPasswordTokenExpiry: { $gt: Date.now() },
+        });
+
+        if (!user) return next("Invalid token");
+
+        const updatedUser = await User.findByIdAndUpdate(
+            user._id,
+            {
+                password: newPassword,
+            },
+            { new: true }
+        );
+        if (!updatedUser) return next("Failed to reset password");
+
+        return res.status(201).json({
+            success: true,
+            message: "Password updated",
+            data: {},
+        });
+    } catch (error) {
+        next(error);
+    }
+};
