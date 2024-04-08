@@ -201,14 +201,10 @@ export const resetPassword = async (req, res, next) => {
 
         if (!user) return next("Invalid token");
 
-        const updatedUser = await User.findByIdAndUpdate(
-            user._id,
-            {
-                password: newPassword,
-            },
-            { new: true }
-        );
-        if (!updatedUser) return next("Failed to reset password");
+        user.password = newPassword;
+        user.forgotPasswordToken = "";
+        user.forgotPasswordTokenExpiry = "";
+        await user.save({ validateBeforeSave: false });
 
         return res.status(201).json({
             success: true,
