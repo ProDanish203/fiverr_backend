@@ -185,6 +185,7 @@ export const sendForgotLink = async (req, res, next) => {
             data: {},
         });
     } catch (error) {
+        console.log(error);
         next(error);
     }
 };
@@ -215,6 +216,7 @@ export const resetPassword = async (req, res, next) => {
             data: {},
         });
     } catch (error) {
+        console.log(error);
         next(error);
     }
 };
