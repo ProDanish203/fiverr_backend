@@ -74,7 +74,9 @@ export const loginUser = async (req, res, next) => {
             userData._id
         );
 
-        const user = await User.findById(userData._id).select("-password");
+        const user = await User.findById(userData._id).select(
+            "-password -refreshToken -forgotPasswordToken -forgotPasswordTokenExpiry -verifyToken -verifyTokenExpiry"
+        );
 
         // Cookie options
         const options = {

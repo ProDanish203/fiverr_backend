@@ -31,6 +31,8 @@ router.put(
     upload.single("avatar"),
     updateProfile
 );
+
+// Incomplete
 router.delete("/delete/:id", verifyAuth(Object.values(ROLES)), deleteUser);
 
 export default router;

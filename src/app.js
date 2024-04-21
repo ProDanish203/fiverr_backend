@@ -7,6 +7,8 @@ import { errorMiddleware } from "./middlewares/error.middleware.js";
 // Routes
 import authRoute from "./routes/auth.route.js";
 import userRoute from "./routes/user.route.js";
+import categoryRoute from "./routes/category.route.js";
+import gigRoute from "./routes/gig.route.js";
 
 const app = express();
 
@@ -30,6 +32,8 @@ app.disable("x-powered-by");
 // Routes
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/user", userRoute);
+app.use("/api/v1/category", categoryRoute);
+app.use("/api/v1/gigs", gigRoute);
 
 // Custom middleware for errors
 app.use(errorMiddleware);
