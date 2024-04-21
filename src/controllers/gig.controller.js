@@ -24,7 +24,7 @@ export const createGig = async (req, res, next) => {
             req.body;
 
         if (req.user.role !== ROLES.SELLER)
-            return next("You are not authorized to perform this operation");
+            return next("You are not authorized to perform this action");
         if (!title) return next("Gig title is required");
         if (!desc) return next("Gig description is required");
         if (!category) return next("Gig category is required");

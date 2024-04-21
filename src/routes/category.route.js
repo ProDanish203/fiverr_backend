@@ -16,6 +16,7 @@ router.get("/single/:id", getSingleCategory);
 
 router.post("/create", verifyAuth(Object.values(ROLES)), createCategory);
 router.put("/update/:id", verifyAuth(Object.values(ROLES)), updateCategory);
+// Incomplete
 router.delete("/delete/:id", verifyAuth(Object.values(ROLES)), deleteCategory);
 
 export default router;
