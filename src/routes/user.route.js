@@ -26,7 +26,7 @@ router.post(
 router.post("/verify-email", verifyAuth(Object.values(ROLES)), verifyEmail);
 
 router.put(
-    "/update/:id",
+    "/update",
     verifyAuth(Object.values(ROLES)),
     upload.single("avatar"),
     updateProfile

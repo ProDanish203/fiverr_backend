@@ -121,12 +121,13 @@ export const updateProfile = async (req, res, next) => {
                     : next("Email already in use");
             }
         }
+        console.log(req.file)
 
         let avatar = null;
-        if (req.file) {
-            const avatarLocalPath = req.file?.path;
-            avatar = await uploadFile(avatarLocalPath);
-        }
+        // if (req.file) {
+        //     const avatarLocalPath = req.file?.path;
+        //     avatar = await uploadFile(avatarLocalPath);
+        // }
 
         const fields = {
             country,

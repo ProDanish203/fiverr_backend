@@ -1,4 +1,6 @@
+import mongoose from "mongoose";
 import { Gig } from "../models/gig.model.js";
+import { User } from "../models/user.model.js";
 import { ROLES } from "../utils/constants.js";
 import { uploadFile } from "../utils/fileUpload.js";
 
@@ -12,6 +14,52 @@ export const getAllGigs = async (req, res, next) => {
 
 export const getSingleGig = async (req, res, next) => {
     try {
+        const { id } = req.params;
+
+        const gig = await Gig.findById(id);
+        if (!gig) return next("Gig not found");
+
+        const gigData = await Gig.aggregate([
+            // First
+            {
+                $match: {
+                    _id: gig._id,
+                },
+            },
+            // Second
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "sellerId",
+                    foreignField: "_id",
+                    as: "seller",
+                    pipeline: [
+                        {
+                            $project: {
+                                username: 1,
+                                avatar: 1,
+                                email: 1,
+                                name: 1,
+                            },
+                        },
+                    ],
+                },
+            },
+            // Third
+            {
+                $addFields: {
+                    seller: {
+                        $first: "$seller",
+                    },
+                },
+            },
+        ]);
+
+        return res.status(200).json({
+            success: true,
+            message: "Gig fetched",
+            data: gigData,
+        });
     } catch (error) {
         console.log(error);
         next(error);
@@ -30,7 +78,7 @@ export const createGig = async (req, res, next) => {
         if (!category) return next("Gig category is required");
         if (!price) return next("Gig price is required");
         if (!deliveryTime) return next("Gig delivery time is required");
-
+        console.log(req.file);
         const coverLocalPath = req.files?.cover?.[0].path;
         const imagesLocalPath = req.files?.images?.[0].path;
 
@@ -69,7 +117,7 @@ export const createGig = async (req, res, next) => {
         return res.status(200).json({
             success: true,
             message: "Gig created successfully",
-            data: user,
+            data: gig,
         });
     } catch (error) {
         console.log(error);
